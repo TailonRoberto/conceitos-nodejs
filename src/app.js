@@ -33,31 +33,46 @@ app.post("/repositories", (request, response) => {
 });
 
 app.put("/repositories/:id", (request, response) => {
-   const {id } = request.params.id;
-   const { url, title,  techs } = request.body;
-   const repository = repositories.find(repo => repo.id === id );   
-   
+  const { id } = request.params;
+  const { url, title,  techs, likes } = request.body;  
 
-   if (!repository) 
-   {   return response.status(400).send().json({ error: 'Repositório Inexistente'});      }
-   
-   
-   repository.url = url;
-   repository.title = title;
-   repository.techs = techs;
+  const repositoryIndex = repositories.findIndex(repo => repo.id === id);
+  
 
-   return response.json(repository);
+  if (repositoryIndex === -1 ) 
+  {   return response.status(400).send().json({ error: 'Repositório Inexistente'});      }
+  
+
+  const repository = {
+    id,
+    title,
+    url,
+    techs,
+    likes: repositories[repositoryIndex].likes
+  }
+  
+  repositories[repositoryIndex] = repository
+
+  return response.json(repository);
 
 });
 
 app.delete("/repositories/:id", (request, response) => {
-  const {id } = request.params.id;  
+  const { id } = request.params;  
   const repositoryIndex = repositories.findIndex(repo => repo.id === id );  
-  if (repositoryIndex < 0) 
+
+
+
+
+  if (repositoryIndex === -1) 
   {   
     return response.status(400).send().json({ error: 'Repositório Inexistente'});
-  }   
-  
+  }
+  else
+  {
+    repositories.slice(repositoryIndex, 1);
+  }  
+
   return response.status(204).send();
 
 });
