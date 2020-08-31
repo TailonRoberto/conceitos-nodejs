@@ -70,7 +70,7 @@ app.delete("/repositories/:id", (request, response) => {
   }
   else
   {
-    repositories.slice(repositoryIndex, 1);
+    repositories.splice(repositoryIndex, 1);
   }  
 
   return response.status(204).send();
