@@ -48,7 +48,7 @@ app.put("/repositories/:id", (request, response) => {
     title,
     url,
     techs,
-    likes: repositories[repositoryIndex].likes
+    likes: repositories[repositoryIndex].likes + 1
   }
   
   repositories[repositoryIndex] = repository
@@ -60,10 +60,9 @@ app.put("/repositories/:id", (request, response) => {
 app.delete("/repositories/:id", (request, response) => {
   const { id } = request.params;  
   const repositoryIndex = repositories.findIndex(repo => repo.id === id );  
+  
 
-
-
-
+  console.log(repositories)
   if (repositoryIndex === -1) 
   {   
     return response.status(400).send().json({ error: 'Repositório Inexistente'});
@@ -72,9 +71,9 @@ app.delete("/repositories/:id", (request, response) => {
   {
     repositories.splice(repositoryIndex, 1);
   }  
-
+  console.log(repositories);
   return response.status(204).send();
-
+ 
 });
 
 app.post("/repositories/:id/like", (request, response) => {
